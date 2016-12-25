@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="arr_schools">
+        <item>交大(徐汇校区)</item>
+        <item>交大(闵行校区)</item>
+        <item>复旦(邯郸校区)</item>
+        <item>复旦(张江校区)</item>
+    </string-array>
+
+    //中心点
+    <array name="arr_latlon">
+        <item>31.2045000000,121.4390620000</item>
+        <item>31.0320340000,121.4428690000</item>
+        <item>31.3046130000,121.5099370000</item>
+        <item>31.1934600000,121.6057020000</item>
+    </array>
+
+</resources>
