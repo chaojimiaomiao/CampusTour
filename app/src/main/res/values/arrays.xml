@@ -5,14 +5,24 @@
         <item>交大(闵行校区)</item>
         <item>复旦(邯郸校区)</item>
         <item>复旦(张江校区)</item>
+        <item>华师(闵行校区)</item>
     </string-array>
 
     //中心点
     <array name="arr_latlon">
         <item>31.2045000000,121.4390620000</item>
         <item>31.0320340000,121.4428690000</item>
-        <item>31.3046130000,121.5099370000</item>
-        <item>31.1934600000,121.6057020000</item>
+        <item>31.3009720000,121.5107090000</item>
+        <item>31.1955120000,121.6050230000</item>
+        <item>31.0364870000,121.4598420000</item>
+    </array>
+    
+    <array name="arr_zoom">
+        <item>17.6f</item>
+        <item>16f</item>
+        <item>17.2f</item>
+        <item>18f</item>
+        <item>17f</item>
     </array>
 
 </resources>

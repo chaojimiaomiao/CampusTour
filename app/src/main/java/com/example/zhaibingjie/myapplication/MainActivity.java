@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.baidu.location.LocationClient;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
@@ -28,12 +27,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private MapView mMapView = null;
     private BaiduMap mBaiduMap;
-    private LocationClient mLocationClient = null;
     private TextView showText;
     private double lat;
     private double lon;
+    private float centerScale;
+    private int rotate = 0;
     private String[] arrSchools;
     private String[][] arrLatLons;
+    private String[] arrZooms;
+    private int mOrder;
 
     private Button showAreaBtn, locateCenterBtn;
 
@@ -54,7 +56,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         lat = Double.parseDouble(arrLatLons[0][0]);
         lon = Double.parseDouble(arrLatLons[0][1]);
-        setUserMapCenter();
+        centerScale = 17.6f;
+        setUserMapCenter(centerScale);
     }
 
     private void parseInfos() {
@@ -65,6 +68,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             arrLatLons[i][0] = tmpS[0];
             arrLatLons[i][1] = tmpS[1];
         }
+
+        arrZooms = getResources().getStringArray(R.array.arr_zoom);
     }
 
     private void initShowBtns() {
@@ -75,7 +80,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             @Override
             public void onClick(View v) {
                 if (showAreaBtn.getText().toString().contains("显示")) {
-                    setUpGroundOverlay();
+                    if (mOrder == 0) {
+                        setUpGroundOverlay(R.mipmap.groudoverlay);
+                    } else if (mOrder == 1) {
+                        north = 31.041343000000012; east = 121.45706499999997;
+                        south = 31.022763999999995; west = 121.42948899999998;
+                        setUpGroundOverlay(R.mipmap.jiaotong_overlay1);
+                    } else if (mOrder == 4) {
+                        north = 31.04508699999999; east = 121.47047200000002;
+                        south = 31.02850399999997; west = 121.45184699999963;
+                        setUpGroundOverlay(R.mipmap.huashi_overlay);
+                    }
                     showAreaBtn.setText("隐藏区域划分");
                 } else {
                     mBaiduMap.clear();
@@ -87,7 +102,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onClick(View v) {
-                setUserMapCenter();
+                setUserMapCenter(centerScale);
             }
         });
     }
@@ -95,36 +110,41 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     /**
      * 设置中心点
      */
-    private void setUserMapCenter() {
+    private void setUserMapCenter(float scale) {
+        setUserMapCenter(scale, 0);
+    }
+
+    private void setUserMapCenter(float scale, float rotate) {
         Log.v("pcw","setUserMapCenter : lat : "+ lat+" lon : " + lon);
         LatLng cenpt = new LatLng(lat,lon);
         //定义地图状态
         MapStatus mMapStatus = new MapStatus.Builder()
                 .target(cenpt)
-                .zoom(17.6f)
+                .zoom(scale)
+                .rotate(rotate)//-20
                 .build();
         //定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
         MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
 
         //改变地图状态
+        mBaiduMap.setMaxAndMinZoomLevel(scale + 1.4f, scale - 0.4f);
         mBaiduMap.setMapStatus(mMapStatusUpdate);
-        mBaiduMap.setMaxAndMinZoomLevel(19f, 17.2f);
         //mBaiduMap.getUiSettings().setScrollGesturesEnabled(false);
         //此处只能setBounds,因为放大后还是要拖动校园的
     }
 
-    //最终能结果→ north:31.208350000000003, east：121.44303999999998, south：31.202850000000005, west：121.43529100000006
+    //这是交大徐汇的贴图结果
     double north = 31.208350000000003, east = 121.44303999999998, south = 31.202850000000005, west = 121.43529100000006;
-    private void setUpGroundOverlay() {
+    private void setUpGroundOverlay(int resourceId) {
         LatLng northeast = new LatLng(north, east);//右上角31.2081750000,121.4424570000
         LatLng southwest = new LatLng(south, west);//左下角31.2028100000,121.4351810000
         LatLngBounds bounds = new LatLngBounds.Builder().include(northeast)
                 .include(southwest).build();
 
         BitmapDescriptor bdGround = BitmapDescriptorFactory
-                .fromResource(R.mipmap.groudoverlay);
+                .fromResource(resourceId);
         OverlayOptions ooGround = new GroundOverlayOptions()
-                .positionFromBounds(bounds).image(bdGround).transparency(0.6f);
+                .positionFromBounds(bounds).image(bdGround).transparency(0.8f);
         mBaiduMap.clear();
         mBaiduMap.addOverlay(ooGround);
         showText.setText("north:" + north + ", east：" + east + ", south：" + south + ", west：" + west);
@@ -200,7 +220,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 west -= 0.0000100000;
                 break;
         }
-        setUpGroundOverlay();
+        setUpGroundOverlay(R.mipmap.huashi_overlay);
     }
 
     @Override
@@ -216,9 +236,22 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int selectedOrder = item.getOrder();
+        mOrder = selectedOrder;
         lat = Double.parseDouble(arrLatLons[selectedOrder][0]);
         lon = Double.parseDouble(arrLatLons[selectedOrder][1]);
-        setUserMapCenter();
+        String zoomS = arrZooms[selectedOrder];
+        centerScale = new Float(zoomS);
+        /*if (selectedOrder == 1) {//交大(闵行校区)
+            rotate = -20;
+        } else {
+            rotate = 0;
+        }
+        setUserMapCenter(centerScale);*/
+        if (selectedOrder == 1) {//交大(闵行校区)
+            setUserMapCenter(centerScale, 0);//-20
+        } else {
+            setUserMapCenter(centerScale);
+        }
 
         return true;
     }

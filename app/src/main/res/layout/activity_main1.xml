@@ -26,7 +26,6 @@
         android:layout_height="wrap_content" />
 
     <TextView
-        android:visibility="invisible"
         android:id="@+id/txtShow"
         android:text="shishihish"
         android:layout_marginRight="80dp"
@@ -41,14 +40,12 @@
         android:clickable="true" />
 
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_north_jia"
         android:layout_alignParentRight="true"
         android:text="n+"
         android:layout_width="50dp"
         android:layout_height="40dp" />
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_north_jian"
         android:layout_below="@id/control_north_jia"
         android:layout_alignParentRight="true"
@@ -57,14 +54,12 @@
         android:layout_height="40dp" />
 
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_east_jia"
         android:layout_toLeftOf="@id/control_north_jia"
         android:text="e+"
         android:layout_width="50dp"
         android:layout_height="40dp" />
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_east_jian"
         android:layout_toLeftOf="@id/control_north_jian"
         android:layout_below="@id/control_east_jia"
@@ -73,21 +68,18 @@
         android:layout_height="40dp" />
 
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_south_jia"
         android:layout_alignParentBottom="true"
         android:text="s+"
         android:layout_width="50dp"
         android:layout_height="40dp" />
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_south_jian"
         android:layout_above="@id/control_south_jia"
         android:text="s-"
         android:layout_width="50dp"
         android:layout_height="40dp" />
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_west_jia"
         android:layout_alignParentBottom="true"
         android:layout_toRightOf="@id/control_south_jia"
@@ -95,7 +87,6 @@
         android:layout_width="50dp"
         android:layout_height="40dp" />
     <Button
-        android:visibility="invisible"
         android:id="@+id/control_west_jian"
         android:layout_above="@id/control_west_jia"
         android:layout_toRightOf="@id/control_south_jian"
