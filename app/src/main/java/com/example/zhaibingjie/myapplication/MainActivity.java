@@ -7,12 +7,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.GroundOverlayOptions;
+import com.baidu.mapapi.map.InfoWindow;
 import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
@@ -21,23 +22,22 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.LatLngBounds;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity implements View.OnClickListener {//
 
     private MenuItem[] miSwitch = null;
 
     private MapView mMapView = null;
     private BaiduMap mBaiduMap;
-    private TextView showText;
     private double lat;
     private double lon;
     private float centerScale;
-    private int rotate = 0;
     private String[] arrSchools;
     private String[][] arrLatLons;
     private String[] arrZooms;
     private int mOrder;
 
     private Button showAreaBtn, locateCenterBtn;
+    private Button showInfoBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         mBaiduMap = mMapView.getMap();
 
         parseInfos();
-        initBtns();
+        //initBtns();
         initShowBtns();
 
         lat = Double.parseDouble(arrLatLons[0][0]);
@@ -73,6 +73,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initShowBtns() {
+        showInfoBtn = (Button)findViewById(R.id.show_info);
+        showInfoBtn.setOnClickListener(this);
         showAreaBtn = (Button)findViewById(R.id.show_area);
         locateCenterBtn = (Button)findViewById(R.id.show_center);
         showAreaBtn.setOnClickListener(new Button.OnClickListener() {
@@ -90,6 +92,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                         north = 31.04508699999999; east = 121.47047200000002;
                         south = 31.02850399999997; west = 121.45184699999963;
                         setUpGroundOverlay(R.mipmap.huashi_overlay);
+                    } else if (mOrder == 5) {
+                        north = 30.842956000000036; east = 121.51899600000017;
+                        south = 30.830042;          west = 121.50206299999972;
+                        setUpGroundOverlay(R.mipmap.huadongligong_overlay);
+                    } else if (mOrder == 6) {
+                        north = 31.299497000000034; east = 121.23025;
+                        south = 31.28345899999999;  west = 121.2115;
+                        setUpGroundOverlay(R.mipmap.tongji_overlay);
                     }
                     showAreaBtn.setText("隐藏区域划分");
                 } else {
@@ -144,33 +154,15 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         BitmapDescriptor bdGround = BitmapDescriptorFactory
                 .fromResource(resourceId);
         OverlayOptions ooGround = new GroundOverlayOptions()
-                .positionFromBounds(bounds).image(bdGround).transparency(0.8f);
+                .positionFromBounds(bounds).image(bdGround).transparency(0.6f);
         mBaiduMap.clear();
         mBaiduMap.addOverlay(ooGround);
-        showText.setText("north:" + north + ", east：" + east + ", south：" + south + ", west：" + west);
-        Log.e("", "north:" + north + ", east：" + east + ", south：" + south + ", west：" + west);
     }
 
-    Button jiaNBtn, jianNBtn, jianEBtn, jiaEBtn, jiaSBtn, jianSBtn, jiaWBtn, jianWBtn;
-    private void initBtns() {
-        jiaNBtn = (Button) findViewById(R.id.control_north_jia);
-        jianNBtn = (Button) findViewById(R.id.control_north_jian);
-        jiaEBtn = (Button) findViewById(R.id.control_east_jia);
-        jianEBtn = (Button) findViewById(R.id.control_east_jian);
-        jiaSBtn = (Button) findViewById(R.id.control_south_jia);
-        jianSBtn = (Button) findViewById(R.id.control_south_jian);
-        jiaWBtn = (Button) findViewById(R.id.control_west_jia);
-        jianWBtn = (Button) findViewById(R.id.control_west_jian);
+    private void showInfo() {
+        LinearLayout popLL = (LinearLayout) getLayoutInflater().inflate(R.layout.popup_text, null);
 
-        showText = (TextView) findViewById(R.id.txtShow);
-        jiaNBtn.setOnClickListener(this);
-        jianNBtn.setOnClickListener(this);
-        jiaEBtn.setOnClickListener(this);
-        jianEBtn.setOnClickListener(this);
-        jiaSBtn.setOnClickListener(this);
-        jianSBtn.setOnClickListener(this);
-        jiaWBtn.setOnClickListener(this);
-        jianWBtn.setOnClickListener(this);
+        mBaiduMap.showInfoWindow(new InfoWindow(popLL, new LatLng(lat,lon), -40));
     }
 
     @Override
@@ -190,37 +182,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onPause();
         //在activity执行onPause时执行mMapView. onPause ()，实现地图生命周期管理
         mMapView.onPause();
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.control_north_jia:
-                north += 0.0000500000;
-                break;
-            case R.id.control_north_jian:
-                north -= 0.0000500000;
-                break;
-            case R.id.control_east_jia:
-                east += 0.0000100000;
-                break;
-            case R.id.control_east_jian:
-                east -= 0.0000100000;
-                break;
-            case R.id.control_south_jia:
-                south += 0.0000500000;
-                break;
-            case R.id.control_south_jian:
-                south -= 0.0000500000;
-                break;
-            case R.id.control_west_jia:
-                west += 0.0000100000;
-                break;
-            case R.id.control_west_jian:
-                west -= 0.0000100000;
-                break;
-        }
-        setUpGroundOverlay(R.mipmap.huashi_overlay);
     }
 
     @Override
@@ -254,6 +215,11 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         }
 
         return true;
+    }
+
+    @Override
+    public void onClick(View v) {
+        showInfo();
     }
 
     //MapStatusUpdateFactory.newLatLngZoom(cenpt, 17.6f);

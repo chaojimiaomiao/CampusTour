@@ -6,6 +6,8 @@
         <item>复旦(邯郸校区)</item>
         <item>复旦(张江校区)</item>
         <item>华师(闵行校区)</item>
+        <item>华理(奉贤校区)</item>
+        <item>同济(嘉定校区)</item>
     </string-array>
 
     //中心点
@@ -15,6 +17,8 @@
         <item>31.3009720000,121.5107090000</item>
         <item>31.1955120000,121.6050230000</item>
         <item>31.0364870000,121.4598420000</item>
+        <item>30.8360510000,121.5105750000</item>
+        <item>31.2918330000,121.2214920000</item>
     </array>
     
     <array name="arr_zoom">
@@ -23,6 +27,8 @@
         <item>17.2f</item>
         <item>18f</item>
         <item>17f</item>
+        <item>17f</item>
+        <item>16.6f</item>
     </array>
 
 </resources>

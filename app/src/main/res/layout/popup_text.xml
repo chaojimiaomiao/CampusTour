@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/trans_gray">
+
+    <TextView
+        android:text="“交通”之名取自于《易经·泰卦》，其曰：“天地交而万物通也，上下交而其志同也。”天地之交是最大的“交”，是万物大“通”之时，这也正是上海交通大学之所以命名为“交通”所蕴含的人文精神和办学理念。"
+        android:layout_width="130dp"
+        android:layout_height="wrap_content" />
 
 </LinearLayout>
